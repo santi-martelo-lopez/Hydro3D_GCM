@@ -1,0 +1,72 @@
+======   *********  Hydro3D   -   v6.0      ******     ======
+=======================Numeric parameters===============================
+channel 0.60 		             Keyword, Ubulk
+0.025 0.025 0.025	     	     dx,dy,dz (Grid resolutions for coarser level)
+100 0.72 0.0 0.0034      1/vis(normRe),Prandtl(ENERGY),turb Schmidt(ENERGY+SCALAR),beta(ENERGY)
+3                            convection_scheme(1=Exp.Euler,2=AdamsBashfort,3=RK2,4=RK3)
+3                            diffusion_scheme(1=Imp.Euler,2=CrankNicholson,3=ExplicitRungeKuttaDiff)
+3                            differencing(1=2ndCDS,2=4thCDS,3=WENO)
+2                            solver(1=sip,2=multigrig)
+2 2                          multigrid step (ngrid), multigrid iteration scheme(1=GSS,2=TDMA,3=RBGSS)
+2000 4 4                       multigrid maximum iteration per time step,restriction iter, prolongation iter
+T 0.0025 			     Fixed (T) or Variable (F) time step, dt
+200 5 5
+1 1
+10
+0.05 0.95
+35 0.7               	     sweeps,safety_factor (CFL)
+320000 T F 100                 Total number Iterations,Restart,Reinitiate mean values,n_out
+50 1.0E-6 5 5 5 25           niter,eps,nswp(1),nswp(2),nswp(3),nswp(4)
+=======================Flow boundary conditions=========================
+31			     	     West   (1= Inflow; 12=1/7th power law; 7=prescribed inflow; 8=SEM)
+2                            East   (2= NeumannBC 21= ConvectiveBC)
+3                            South  (3= Slip, 4= No-Slip)
+3                            North  (5= Periodic Condition)
+4                            Bottom (Log-laws: 61=smooth;62=rough;63=1/6th;64=1/7th;65=1/8th)
+3                            Top    
+n 0.03			     Friction coefficient ('n':manning;'k':equivalent sand)
+F 0			     save inflow data (precursor sim.) ; number of inlets
+=========== Wave generation/absorption toolbox ===========
+2                            Wave theory,(1=Linear, 2=2nd 0rder Stokes, 3=Solitary,11=cnoidal)
+0.0010d0 3.5 12.0d0            Ho(Wave Height), tau(phase for solitary),L(wavelength)
+T 2 41.6d0                  Wave Absorption(1=Artificial damping, 2=Relaxation method),end of domain 
+=======================Synthetic Eddy Method======================= 
+31					Velocity profile (same indices as West BC)
+0.01					Turbulence intensity (homogeneous)
+0					Number SEM inlet profiles 
+=======================Modelling Options==========================
+T 30.50 30.5 0.01               time_averaging,t_start_averaging1,t_start_averaging2,noise
+T 2                          SGS-model,1=Smagorinsky,2=WALE,3=OneEqnModel,4=k-eps model (RANS)  
+1                            LMR (1=old ghost cell approach, 2=new ghost cell approach)
+2                            pl_ex (# of extra ghost planes. pl_ex=0 -> blocks have only 1 ghost layer)
+T F F                        LIMB,LROUGH,LSCALAR
+F 1 				     LPT,OpenMP threads (For IBM and LPT)
+=======================Energy boundary conditions=======================
+F 0.5  -0.5                  LENERGY,Th,Tc 
+7			     	     West   Temp Boundary Condition (5= Periodic)
+7                            East   Temp Boundary Condition (7= Adiabatic)
+7                            South  Temp Boundary Condition (8= Cold Surface)
+7                            North  Temp Boundary Condition (9= Hot Surface)
+7                            Bottom Temp Boundary Condition
+7                            Top    Temp Boundary Condition
+=======================Free surface parameters========================== 
+1.0 T T        		     Phi depth,L_LSM,reinit
+300 1.0E-3 0.048		     ntime_reinit,reldif_LSM,CFL_LSM
+F				     LENDS (fix phi at streamwise domain ends)
+F                            L_LSMbase 
+F F				     L_anim_phi,L_anim_grd
+1000.0 1.00 1.0E-6 1.48E-5   densl,densg,nul,nug
+0.0 -9.81 0.0                gx,gy,gz
+0.00				     slope
+=======================Results output options =======================
+T					Turbulent quantities
+T				        Tecinstantaneous: vels written each n_out.
+F					Planes outlet (coordinates set in post.for)
+T					Pressure: Inst,Mean,Fluctuations.
+T					Binary files--> needed to RESTART
+=======================Time series======================================
+4					Number of time series points
+-1	10	8	10
+-2	10	8	10
+-3	10	8	10
+-4	10	8	10
